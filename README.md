@@ -5,7 +5,8 @@ Requires:
 - python3 interpreter 
 - your keyconfig file. Usually you can find it at
 ```%appdata%\Blender Foundation\Blender\2.80\scripts\presets\keyconfig\<your_config_name.py>``` on Windows 
-or ```$HOME/.config/blender/2.80/scripts/presets/keyconfig\<your_config_name.py>``` on a reasonable OS
+or 
+```$HOME/.config/blender/2.80/scripts/presets/keyconfig\<your_config_name.py>``` on a reasonable OS
 
 Run
 ```
