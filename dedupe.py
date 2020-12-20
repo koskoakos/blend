@@ -45,18 +45,22 @@ for a, b, c in kcd:
     for key in list(keys):
         command, shortcut, args = map(dictify, key)
         if args and 'properties' in args:
-            args['properties'] = [tuple(i) if isinstance(i, list) else i 
-                                  for item in args['properties'] 
-                                  for i in item]
-
+            args['properties'] = [tuple(tuple(i) if isinstance(i, list) else i for i in item)
+                                  for item in args['properties']]
         k_i.append((command, shortcut, args))
 
     c['items'] = k_i
 
-
 if cmd_args.dry:
     pprint.pprint(kcd)
     sys.exit(0)
+
+deduped = len(c['items']) - len(k_i)
+if deduped == 0:
+    print("No duplicate entries found.")
+    sys.exit(0)
+else: 
+    print(f"Deduped {deduped} entries.")
 
 with open(cmd_args.output, 'w') as f:
     f.write("keyconfig_data = \\\n")
@@ -68,4 +72,3 @@ if __name__ == "__main__":
     from bl_keymap_utils.io import keyconfig_import_from_data
     keyconfig_import_from_data(os.path.splitext(os.path.basename(__file__))[0], keyconfig_data)
 """)
-
