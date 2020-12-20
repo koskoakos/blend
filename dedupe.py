@@ -45,7 +45,9 @@ for a, b, c in kcd:
     for key in list(keys):
         command, shortcut, args = map(dictify, key)
         if args and 'properties' in args:
-            args['properties'] = [tuple(item) for item in args['properties']]
+            args['properties'] = [tuple(i) if isinstance(i, list) else i 
+                                  for item in args['properties'] 
+                                  for i in item]
 
         k_i.append((command, shortcut, args))
 
