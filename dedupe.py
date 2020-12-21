@@ -1,13 +1,13 @@
 import os
 import sys
-import json
+import pickle
 import argparse
 import pprint
 from functools import partial
 import importlib.util
 
-hashify = partial(json.dumps, sort_keys=True)
-dictify = partial(json.loads)
+hashify = partial(pickle.dumps)
+dictify = partial(pickle.loads)
 
 parser = argparse.ArgumentParser()
 
@@ -32,14 +32,14 @@ except:
     sys.exit(1)
 
 kcd = keyconfig.keyconfig_data
-
+total_pre = 0
+total_post = 0
 for a, b, c in kcd:
     keys = set()
-
     for item in c['items']:
         command, shortcut, args = map(hashify, item)
         keys.add((command, shortcut, args))
-        
+    total_pre += len(c['items'])
 
     k_i = []
     for key in list(keys):
@@ -50,12 +50,13 @@ for a, b, c in kcd:
         k_i.append((command, shortcut, args))
 
     c['items'] = k_i
+    total_post += len(c['items'])
 
 if cmd_args.dry:
     pprint.pprint(kcd)
     sys.exit(0)
 
-deduped = len(c['items']) - len(k_i)
+deduped = total_pre - total_post
 if deduped == 0:
     print("No duplicate entries found.")
     sys.exit(0)
